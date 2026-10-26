@@ -1,4 +1,16 @@
-# Away Assistant
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/olig89/away-assistant/main/custom_components/away_assistant/brand/dark_logo.png">
+    <img alt="Away Assistant" src="https://raw.githubusercontent.com/olig89/away-assistant/main/custom_components/away_assistant/brand/logo.png" height="72">
+  </picture>
+</p>
+
+<p align="center">
+  <a href="https://hacs.xyz/docs/faq/custom_repositories/"><img alt="HACS custom repository" src="https://img.shields.io/badge/HACS-custom-41BDF5"></a>
+  <a href="https://github.com/olig89/away-assistant/releases"><img alt="Latest release" src="https://img.shields.io/github/v/release/olig89/away-assistant?color=D1495B"></a>
+  <img alt="Home Assistant 2026.9 or later" src="https://img.shields.io/badge/Home%20Assistant-2026.9%2B-18BCF2">
+  <a href="https://github.com/olig89/away-assistant/actions/workflows/tests.yml"><img alt="Tests" src="https://github.com/olig89/away-assistant/actions/workflows/tests.yml/badge.svg"></a>
+</p>
 
 One switch for "we're away" in Home Assistant. It turns the house down, watches it, makes it look lived-in,
 warms it back up in time for your return, and tells you what it did.
