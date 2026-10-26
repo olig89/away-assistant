@@ -1,0 +1,15 @@
+{
+  "domain": "away_assistant",
+  "name": "Away Assistant",
+  "after_dependencies": ["logbook", "mobile_app", "weather"],
+  "codeowners": ["@olig89"],
+  "config_flow": true,
+  "dependencies": ["recorder"],
+  "documentation": "https://github.com/olig89/away-assistant",
+  "integration_type": "service",
+  "iot_class": "calculated",
+  "issue_tracker": "https://github.com/olig89/away-assistant/issues",
+  "requirements": [],
+  "single_config_entry": true,
+  "version": "0.1.0"
+}

@@ -1,0 +1,336 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Away Assistant",
+        "description": "Everything is optional and can be changed later.",
+        "sections": {
+          "basics": {
+            "name": "Basics",
+            "description": "Who gets told, who lives here, and when the daily report goes out.",
+            "data": {
+              "notify_services": "Notify services",
+              "persons": "People",
+              "daily_report_time": "Daily report time",
+              "lights_off_when_leaving": "Turn lights off when leaving"
+            },
+            "data_description": {
+              "notify_services": "Every message goes to all of these (for example notify.mobile_app_your_phone).",
+              "persons": "A phone arriving home during Coming home switches to Home after 10 min; during Away it only asks.",
+              "daily_report_time": "While away, a 'house is fine' message at this time every day.",
+              "lights_off_when_leaving": "Every light that is on (not light groups) is turned off on Away."
+            }
+          },
+          "heating": {
+            "name": "Heating and warm-up",
+            "description": "Thermostats are turned down on Away and put back for the warm-up.",
+            "data": {
+              "thermostats": "Thermostats",
+              "temperature_sensors": "Room temperature sensors",
+              "outdoor_sensor": "Outdoor temperature sensor",
+              "weather": "Weather (forecast)",
+              "warm_up_min_hours": "Shortest warm-up",
+              "warm_up_margin_hours": "Safety margin",
+              "time_constant_guess": "Starting guess: how slowly the house cools",
+              "heating_rate_guess": "Starting guess: how fast the heating warms it",
+              "on_track_hours": "On-track check before return",
+              "on_track_tolerance": "On-track tolerance"
+            },
+            "data_description": {
+              "thermostats": "Set to the away temperature on Away (never above their own setpoint), put back at warm-up.",
+              "temperature_sensors": "For the coldest/warmest room and the house model. Empty: the thermostats' own readings.",
+              "outdoor_sensor": "Used by the calculated warm-up and the reports.",
+              "weather": "Its hourly forecast gives the outdoor temperature during the warm-up.",
+              "warm_up_min_hours": "A calculated warm-up never starts later than this before the return. The longest is the Warm-up hours setting on the device.",
+              "warm_up_margin_hours": "Added to what the model says the warm-up needs.",
+              "time_constant_guess": "Hours (the house's time constant). Measured while you're away and learned trip by trip; this is only the start. Floor heating: about 100.",
+              "heating_rate_guess": "K per hour with everything calling, before losses. Measured during each warm-up. Floor heating: about 0.2.",
+              "on_track_hours": "Hours before the return (at most halfway through the warm-up) when every room is checked against its setpoint.",
+              "on_track_tolerance": "A room this close to its setpoint counts as on track."
+            }
+          },
+          "while_away": {
+            "name": "While away",
+            "description": "Other things to change while you're away. Everything is put back.",
+            "data": {
+              "preset_climates": "Climate devices to switch preset",
+              "away_preset": "Preset while away",
+              "switches_off": "Turn off while away",
+              "selects": "Selects to change while away",
+              "select_option": "Option while away",
+              "covers": "Covers to close and keep closed"
+            },
+            "data_description": {
+              "preset_climates": "For example a ventilation unit. Put back at warm-up.",
+              "away_preset": "For example holiday or away.",
+              "switches_off": "Switches, automations, input booleans or fans turned off while away and put back on Home.",
+              "selects": "Put back on Home.",
+              "select_option": "The option every chosen select is set to while away.",
+              "covers": "Closed on Away; if one opens it is closed again (up to 3 times a day) and you're told."
+            }
+          },
+          "alerts": {
+            "name": "Alerts",
+            "description": "Only while Away or Coming home.",
+            "data": {
+              "motion_sensors": "Motion sensors",
+              "door_sensors": "Door and window sensors",
+              "vacuum": "Robot vacuum",
+              "vacuum_quiet_minutes": "Quiet after the vacuum docks",
+              "alert_hold_minutes": "Hold after a movement alert",
+              "cold_threshold": "Too cold below",
+              "fault_sensors": "Fault sensors",
+              "backup_heater_energy": "Backup heater energy",
+              "hot_sensors": "Too-hot sensors",
+              "hot_threshold": "Too hot above",
+              "power_sensor": "Power / UPS status",
+              "connectivity_sensors": "Connectivity sensors",
+              "appliances": "Appliances (pre-flight)",
+              "battery_ignore": "Batteries to ignore",
+              "report_extras": "Extra lines in the daily report"
+            },
+            "data_description": {
+              "vacuum": "Motion alerts are ignored while it's out (at most 90 min) and shortly after it docks. Doors are never ignored.",
+              "fault_sensors": "Problem binary sensors, for example a heat pump's fault output. Alert after 5 min.",
+              "backup_heater_energy": "An energy counter (kWh). A rise of 0.3 kWh or more while away is an urgent alert, at most hourly.",
+              "power_sensor": "A UPS status sensor (on battery when it reports OB or LB) or a binary sensor that is off during a power cut.",
+              "connectivity_sensors": "For example a Zigbee bridge. Alert after 15 min off.",
+              "appliances": "Flagged in the pre-flight check if mid-cycle.",
+              "battery_ignore": "Left out of the pre-flight low-battery check (phones are left out by themselves)."
+            }
+          },
+          "lived_in": {
+            "name": "Lived-in lights",
+            "description": "Replays what these did N days ago. Set Lived-in lights on the device to Preview first to check it.",
+            "data": {
+              "replay_entities": "Lights and switches to replay",
+              "replay_days": "Replay from this many days ago",
+              "replay_shift_minutes": "Random shift each day",
+              "skip_label": "Skip areas with this label"
+            },
+            "data_description": {
+              "replay_entities": "Only choose switches that are safe to switch on unattended (no heaters or kettles).",
+              "replay_days": "The recorder must keep more days than this (its default is 10).",
+              "replay_shift_minutes": "Up to this many minutes earlier or later, a new shift each day at 04:00.",
+              "skip_label": "Label an area to switch its lights out of the replay."
+            }
+          }
+        }
+      }
+    },
+    "error": {
+      "unknown_notify": "One of the notify services doesn't exist.",
+      "select_option_missing": "Choose the option the selects are set to while away.",
+      "preset_missing": "Choose the preset to use while away."
+    },
+    "abort": {
+      "single_instance_allowed": "Away Assistant is already set up."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Away Assistant",
+        "description": "Changes apply right away.",
+        "sections": {
+          "basics": {
+            "name": "Basics",
+            "description": "Who gets told, who lives here, and when the daily report goes out.",
+            "data": {
+              "notify_services": "Notify services",
+              "persons": "People",
+              "daily_report_time": "Daily report time",
+              "lights_off_when_leaving": "Turn lights off when leaving"
+            },
+            "data_description": {
+              "notify_services": "Every message goes to all of these (for example notify.mobile_app_your_phone).",
+              "persons": "A phone arriving home during Coming home switches to Home after 10 min; during Away it only asks.",
+              "daily_report_time": "While away, a 'house is fine' message at this time every day.",
+              "lights_off_when_leaving": "Every light that is on (not light groups) is turned off on Away."
+            }
+          },
+          "heating": {
+            "name": "Heating and warm-up",
+            "description": "Thermostats are turned down on Away and put back for the warm-up.",
+            "data": {
+              "thermostats": "Thermostats",
+              "temperature_sensors": "Room temperature sensors",
+              "outdoor_sensor": "Outdoor temperature sensor",
+              "weather": "Weather (forecast)",
+              "warm_up_min_hours": "Shortest warm-up",
+              "warm_up_margin_hours": "Safety margin",
+              "time_constant_guess": "Starting guess: how slowly the house cools",
+              "heating_rate_guess": "Starting guess: how fast the heating warms it",
+              "on_track_hours": "On-track check before return",
+              "on_track_tolerance": "On-track tolerance"
+            },
+            "data_description": {
+              "thermostats": "Set to the away temperature on Away (never above their own setpoint), put back at warm-up.",
+              "temperature_sensors": "For the coldest/warmest room and the house model. Empty: the thermostats' own readings.",
+              "outdoor_sensor": "Used by the calculated warm-up and the reports.",
+              "weather": "Its hourly forecast gives the outdoor temperature during the warm-up.",
+              "warm_up_min_hours": "A calculated warm-up never starts later than this before the return. The longest is the Warm-up hours setting on the device.",
+              "warm_up_margin_hours": "Added to what the model says the warm-up needs.",
+              "time_constant_guess": "Hours (the house's time constant). Measured while you're away and learned trip by trip; this is only the start. Floor heating: about 100.",
+              "heating_rate_guess": "K per hour with everything calling, before losses. Measured during each warm-up. Floor heating: about 0.2.",
+              "on_track_hours": "Hours before the return (at most halfway through the warm-up) when every room is checked against its setpoint.",
+              "on_track_tolerance": "A room this close to its setpoint counts as on track."
+            }
+          },
+          "while_away": {
+            "name": "While away",
+            "description": "Other things to change while you're away. Everything is put back.",
+            "data": {
+              "preset_climates": "Climate devices to switch preset",
+              "away_preset": "Preset while away",
+              "switches_off": "Turn off while away",
+              "selects": "Selects to change while away",
+              "select_option": "Option while away",
+              "covers": "Covers to close and keep closed"
+            },
+            "data_description": {
+              "preset_climates": "For example a ventilation unit. Put back at warm-up.",
+              "away_preset": "For example holiday or away.",
+              "switches_off": "Switches, automations, input booleans or fans turned off while away and put back on Home.",
+              "selects": "Put back on Home.",
+              "select_option": "The option every chosen select is set to while away.",
+              "covers": "Closed on Away; if one opens it is closed again (up to 3 times a day) and you're told."
+            }
+          },
+          "alerts": {
+            "name": "Alerts",
+            "description": "Only while Away or Coming home.",
+            "data": {
+              "motion_sensors": "Motion sensors",
+              "door_sensors": "Door and window sensors",
+              "vacuum": "Robot vacuum",
+              "vacuum_quiet_minutes": "Quiet after the vacuum docks",
+              "alert_hold_minutes": "Hold after a movement alert",
+              "cold_threshold": "Too cold below",
+              "fault_sensors": "Fault sensors",
+              "backup_heater_energy": "Backup heater energy",
+              "hot_sensors": "Too-hot sensors",
+              "hot_threshold": "Too hot above",
+              "power_sensor": "Power / UPS status",
+              "connectivity_sensors": "Connectivity sensors",
+              "appliances": "Appliances (pre-flight)",
+              "battery_ignore": "Batteries to ignore",
+              "report_extras": "Extra lines in the daily report"
+            },
+            "data_description": {
+              "vacuum": "Motion alerts are ignored while it's out (at most 90 min) and shortly after it docks. Doors are never ignored.",
+              "fault_sensors": "Problem binary sensors, for example a heat pump's fault output. Alert after 5 min.",
+              "backup_heater_energy": "An energy counter (kWh). A rise of 0.3 kWh or more while away is an urgent alert, at most hourly.",
+              "power_sensor": "A UPS status sensor (on battery when it reports OB or LB) or a binary sensor that is off during a power cut.",
+              "connectivity_sensors": "For example a Zigbee bridge. Alert after 15 min off.",
+              "appliances": "Flagged in the pre-flight check if mid-cycle.",
+              "battery_ignore": "Left out of the pre-flight low-battery check (phones are left out by themselves)."
+            }
+          },
+          "lived_in": {
+            "name": "Lived-in lights",
+            "description": "Replays what these did N days ago. Set Lived-in lights on the device to Preview first to check it.",
+            "data": {
+              "replay_entities": "Lights and switches to replay",
+              "replay_days": "Replay from this many days ago",
+              "replay_shift_minutes": "Random shift each day",
+              "skip_label": "Skip areas with this label"
+            },
+            "data_description": {
+              "replay_entities": "Only choose switches that are safe to switch on unattended (no heaters or kettles).",
+              "replay_days": "The recorder must keep more days than this (its default is 10).",
+              "replay_shift_minutes": "Up to this many minutes earlier or later, a new shift each day at 04:00.",
+              "skip_label": "Label an area to switch its lights out of the replay."
+            }
+          }
+        }
+      }
+    },
+    "error": {
+      "unknown_notify": "One of the notify services doesn't exist.",
+      "select_option_missing": "Choose the option the selects are set to while away.",
+      "preset_missing": "Choose the preset to use while away."
+    }
+  },
+  "entity": {
+    "select": {
+      "mode": {
+        "name": "Mode",
+        "state": {
+          "home": "Home",
+          "away": "Away",
+          "coming_home": "Coming home"
+        }
+      },
+      "warmup_mode": {
+        "name": "Warm-up mode",
+        "state": {
+          "fixed": "Fixed hours",
+          "calculated": "Calculated"
+        }
+      },
+      "lived_in": {
+        "name": "Lived-in lights",
+        "state": {
+          "off": "Off",
+          "preview": "Preview (log only)",
+          "on": "On"
+        }
+      }
+    },
+    "datetime": {
+      "return_at": {
+        "name": "Back"
+      }
+    },
+    "number": {
+      "away_temperature": {
+        "name": "Away temperature"
+      },
+      "warmup_hours": {
+        "name": "Warm-up hours"
+      }
+    },
+    "button": {
+      "preflight_check": {
+        "name": "Pre-flight check"
+      }
+    },
+    "binary_sensor": {
+      "on_track": {
+        "name": "Warm-up on track"
+      }
+    },
+    "sensor": {
+      "status": {
+        "name": "Status",
+        "state": {
+          "home": "Home",
+          "away": "Away",
+          "warming_up": "Warming up"
+        }
+      },
+      "warm_up_start": {
+        "name": "Warm-up start"
+      },
+      "coldest_room": {
+        "name": "Coldest room"
+      },
+      "warmest_room": {
+        "name": "Warmest room"
+      },
+      "preflight_issues": {
+        "name": "Pre-flight issues"
+      },
+      "motion_alerts": {
+        "name": "Motion alerts since report"
+      },
+      "time_constant": {
+        "name": "House time constant"
+      },
+      "heating_rate": {
+        "name": "Heating rate"
+      }
+    }
+  }
+}
