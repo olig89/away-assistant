@@ -24,5 +24,3 @@ jobs:
       - uses: hacs/action@main
         with:
           category: integration
-          # Brand icons are only required for the HACS default store.
-          ignore: brands
